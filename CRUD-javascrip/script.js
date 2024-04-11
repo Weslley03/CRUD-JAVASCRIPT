@@ -26,7 +26,13 @@ criaPost({criador: 'oweslley', conteudo: 'hoje eu treinei duro, e vou prourar me
 //READ ------
 
 function pegaPosts() {
-    return PostJS.post;
+    let texto = document.getElementById('caixaDeTexto');
+    let texto2 = document.getElementById('caixaDeTexto2');
+    let i = PostJS.post[0].criador
+    let y = PostJS.post[0].conteudo
+    texto.innerText = `autor: ${i}`
+    texto2.innerText = `conteudo: ${y}`
+    //return PostJS.post;
 }
 
 //UPTADE ------
@@ -47,4 +53,5 @@ function apagaPost(id) {
     })
     PostJS.post = listaDePostAtualizada; //o PostJs original recebe a copia e passa a ser a verdadeira
 }
-console.log(pegaPosts())
+
+//console.log(pegaPosts())
