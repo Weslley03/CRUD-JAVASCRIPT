@@ -21,24 +21,44 @@ function criaPost(dados) { //função resposável a criar os post do usuario
 }
 
 criaPost({criador: 'oweslley', conteudo: 'hoje eu treinei duro, e vou prourar melhorar 11/04'}) //chama a função e joga os parametros desejados
-
+criaPost({criador: 'oweslley', conteudo: 'hoje vou conseguir treinar? 12/04'})
 
 //READ ------
 
 function pegaPosts() {
-    let texto = document.getElementById('caixaDeTexto');
-    let texto2 = document.getElementById('caixaDeTexto2');
+    let texto1 = document.getElementById('texto1');
+    let texto2 = document.getElementById('texto2');
     let i = PostJS.post[0].criador
     let y = PostJS.post[0].conteudo
-    texto.innerText = `autor: ${i}`
-    texto2.innerText = `conteudo: ${y}`
-    //return PostJS.post;
+
+    let texto3 = document.getElementById('texto3');
+    let texto4 = document.getElementById('texto4');
+    let x = PostJS.post[1].criador
+    let z = PostJS.post[1].conteudo
+
+    let texto5 = document.getElementById('texto5');
+    let texto6 = document.getElementById('texto6');
+    let p = PostJS.post[2].criador
+    let t = PostJS.post[2].conteudo
+
+    texto1.innerHTML = `<strong>autor:</strong> ${i}`
+    texto2.innerHTML = `<strong>conteudo:</strong> ${y}`
+    texto3.innerHTML = `<strong>autor:</strong> ${x}`
+    texto4.innerHTML = `<strong>conteudo:</strong> ${z}`
+    texto5.innerHTML = `<strong>autor:</strong> ${p}`
+    texto6.innerHTML = `<strong>conteudo:</strong> ${t}`
+   
+    //
+}
+
+function pegaPostsTroca() { //necessário criação para o atualizaConteudoDoPost funcionar
+    return PostJS.post;
 }
 
 //UPTADE ------
 
 function atualizaConteudoDoPost(id, novoConteudo) {
-    const postQueVaiSerAtualziado = pegaPosts().find((post) => { //.find encontra o primeiro elemento em um array que satisfaça uma condição específica.
+    const postQueVaiSerAtualziado = pegaPostsTroca().find((post) => { //.find encontra o primeiro elemento em um array que satisfaça uma condição específica.
         return post.id === id; //nesse caso, ele vai encontrar o elemento de ID explanado em parametro
     });
     console.log(postQueVaiSerAtualziado)
