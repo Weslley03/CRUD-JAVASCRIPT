@@ -1,13 +1,12 @@
 <form id="main">
-    <input name="criaPost" placeholder="digiti seu post" />
-    <button type="submit">postar</button>
+    <input name="criaPost" placeholder="digiti seu post" />   <!--caixa de texto-->
+    <button type="submit">postar</button> <!--botão de envio-->
 </form>
-<ul class="listaDePost"></ul>
+<ul class="listaDePost"></ul> <!--aqui vai ser encaminhado o conteudo do post-->
 
 <script>
 
-    //base da linguagem
-    const redeSocial = {
+    const redeSocial = { //criando objeto com ARRAY, substituindo um banco de dados
         usuarios: [{
             username: 'oweslley',
         }],
@@ -27,27 +26,25 @@
             }
 
             //cria post html
-            const $listaDePost = document.querySelector('.listaDePost')
-            $listaDePost.insertAdjacentHTML('afterbegin', `<li>${dados.conteudo}</li>`);
+            const $listaDePost = document.querySelector('.listaDePost') //nossa ul
+            $listaDePost.insertAdjacentHTML('afterbegin', `<li>${dados.conteudo}</li>`); //insertAdjacentHTML, vai ser sempre adicioando logo dentro do elemento, antes de seu primeiro filho.
+
+
         }
     }
         //código front end
         const $meuForm = window.document.getElementById('main')
         //READ
         redeSocial.post.forEach(({criador, conteudo}) => {
-
             redeSocial.criaPost({criador: criador, conteudo: conteudo}, true)  
-
         })
 
         //CREATE
-        $meuForm.addEventListener('submit', function criaPostController(infosDoEvento) {
+        $meuForm.addEventListener('submit', function criaPostController(infosDoEvento) { //assim que houver um submit, execute a função criaPostController
             infosDoEvento.preventDefault();
-            console.log('Estamos criando um post novo')
             const $inputDados = document.querySelector('input[name="criaPost"]')
 
-            redeSocial.criaPost({criador: 'oweslley', conteudo: $inputDados.value})
-
+            redeSocial.criaPost({criador: 'oweslley', conteudo: $inputDados.value}) //aciona a função de criação de post passando oweslley e dados do input como parametros
             $inputDados.value = ''
         })
 </script>
