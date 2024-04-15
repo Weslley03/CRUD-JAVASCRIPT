@@ -1,41 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-    <title>my document</title>
-</head>
-<body>
-    <header id="cabesario">
-        <h1>posts do dia !!</h1>
-        <div id="botoes">
-            <input type="button" id="criar" value="criar" onclick="pegaPosts()">
-            <input type="button" id="alterar" value="alterar" onclick="alterar()">
-            <input type="button" id="apagar" value="apagar" onclick="apagar()">
-        </div>
-    </header>
-    <section>
-        <div id="editarDados">
-            <p>sobre oque está pensando?</p>
-            <input type="text" id="textAdd" placeholder="digite aqui.."> <br><br><br>
-        </div>
+<form id="main">
+        <input name="criaPost" placeholder="digiti seu post">
+        <button type="submit">postar</button>
+</form>
 
-        <div id="parteTextual">
-            <p id="caixaDeTexto"></p>
-            <p id="caixaDeTexto2"></p>
-        </div> <br><br><br>
+<script>
+    console.log('construindoCRUDS')
+    const $meuForm = window.document.getElementById('main');
 
-        <div id="parteTextual2">
-            <p id="xx"></p>
-            <p id="xx"></p>
-        </div> <br><br><br>
-
-        <div id="parteTextual3">
-            <p id="xx"></p>
-            <p id="xx"></p>
-        </div> <br><br><br>
-    </section>
-</body>
-</html>
+    $meuForm.addEventListener('submit', function criaPostController(infosDoEvento) {
+        infosDoEvento.preventDefault();
+        console.log('Estamos criando um post novo')
+    })
+</script>
