@@ -2,13 +2,23 @@
         <input name="criaPost" placeholder="digiti seu post">
         <button type="submit">postar</button>
 </form>
+<ul class="listaDePost">
+
+</ul>
+
 
 <script>
-    console.log('construindoCRUDS')
+
+    //código front end
     const $meuForm = window.document.getElementById('main');
 
     $meuForm.addEventListener('submit', function criaPostController(infosDoEvento) {
         infosDoEvento.preventDefault();
         console.log('Estamos criando um post novo')
+        const $inputDados = document.querySelector('input[name="criaPost"]')
+        const $listaDePost = document.querySelector('.listaDePost');
+
+        $listaDePost.insertAdjacentHTML('afterbegin', `<li>${$inputDados.value}</li>`)
+        $inputDados.value = ''
     })
 </script>
