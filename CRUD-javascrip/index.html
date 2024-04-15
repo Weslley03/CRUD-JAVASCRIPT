@@ -18,21 +18,29 @@
             conteudo: 'primeiro post, testing',
         }],
 
-        criaPost(dados) { //função resposável a criar os post do usuario
-            redeSocial.post.push({ //const PostJS, objeto POST vai receber o .push'acresimo de conteudo em ultima pocição'
+        criaPost(dados, hmtlOnly = false) { //função resposável a criar os post do usuario
+            if (!hmtlOnly) {
+                redeSocial.post.push({ //const PostJS, objeto POST vai receber o .push'acresimo de conteudo em ultima pocição'
                 id: redeSocial.post.length + 1, //soma +1 no id do post anterior
                 criador: dados.criador, //criador vai receber parametro dados
-                conteudo: dados.conteudo
-            }); //conteudo vai receber parametro dados
+                conteudo: dados.conteudo }); //conteudo vai receber parametro dados
+            }
 
             //cria post html
             const $listaDePost = document.querySelector('.listaDePost')
             $listaDePost.insertAdjacentHTML('afterbegin', `<li>${dados.conteudo}</li>`);
         }
     }
-    //código front end
-    
+        //código front end
         const $meuForm = window.document.getElementById('main')
+        //READ
+        redeSocial.post.forEach(({criador, conteudo}) => {
+
+            redeSocial.criaPost({criador: criador, conteudo: conteudo}, true)  
+
+        })
+
+        //CREATE
         $meuForm.addEventListener('submit', function criaPostController(infosDoEvento) {
             infosDoEvento.preventDefault();
             console.log('Estamos criando um post novo')
