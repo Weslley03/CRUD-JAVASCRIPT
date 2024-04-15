@@ -6,38 +6,65 @@
 
 <script>
 
+    //código de responsabilidade backend ---------------------------------------------
     const redeSocial = { //criando objeto com ARRAY, substituindo um banco de dados
         usuarios: [{
             username: 'oweslley',
         }],
 
         post: [{
-            id: 1,
+            id: Date.now(),
             criador: 'oweslley',
             conteudo: 'primeiro post, testing',
         }],
+        readPost(){
+            redeSocial.post.forEach(({id, criador, conteudo}) => {
+            redeSocial.criaPost({id, criador: criador, conteudo: conteudo}, true)  
+            })
+        },
 
         criaPost(dados, hmtlOnly = false) { //função resposável a criar os post do usuario
+            const idInternoAqui = Date.now();
             if (!hmtlOnly) {
                 redeSocial.post.push({ //const PostJS, objeto POST vai receber o .push'acresimo de conteudo em ultima pocição'
-                id: redeSocial.post.length + 1, //soma +1 no id do post anterior
+                id: dados.id || idInternoAqui, //soma +1 no id do post anterior
                 criador: dados.criador, //criador vai receber parametro dados
                 conteudo: dados.conteudo }); //conteudo vai receber parametro dados
             }
 
             //cria post html
             const $listaDePost = document.querySelector('.listaDePost') //nossa ul
-            $listaDePost.insertAdjacentHTML('afterbegin', `<li>${dados.conteudo}</li>`); //insertAdjacentHTML, vai ser sempre adicioando logo dentro do elemento, antes de seu primeiro filho.
+            $listaDePost.insertAdjacentHTML('afterbegin', `
+            <li data-id="${idInternoAqui}">
+                <button class="btn-delete">delete</button>
+                <span contenteditable>
+                    ${dados.conteudo}
+                </span>
+            </li>
+            `); //insertAdjacentHTML, vai ser sempre adicioando logo dentro do elemento, antes de seu primeiro filho.
+        },
 
+        deletaPost(id) {
+            const listaDePostsAtualizada = redeSocial.post.filter((postAtual) => {
+                return postAtual.id !== Number(id);
+            })
+            console.log(listaDePostsAtualizada);
+            redeSocial.post = listaDePostsAtualizada;
+        },
 
-        }
+        atualizaContentDoPost(id, novoConteudo) {
+            const postQueVaiSerAtualizado = redeSocial.post.find((postS) => {
+                return postS.id === Number(id);
+            });
+            console.log(postQueVaiSerAtualizado)
+            postQueVaiSerAtualizado.conteudo = novoConteudo
+        },
     }
-        //código front end
+        //código front end ----------------------------------------------
+
         const $meuForm = window.document.getElementById('main')
         //READ
-        redeSocial.post.forEach(({criador, conteudo}) => {
-            redeSocial.criaPost({criador: criador, conteudo: conteudo}, true)  
-        })
+        redeSocial.readPost()
 
         //CREATE
         $meuForm.addEventListener('submit', function criaPostController(infosDoEvento) { //assim que houver um submit, execute a função criaPostController
@@ -47,4 +74,25 @@
             redeSocial.criaPost({criador: 'oweslley', conteudo: $inputDados.value}) //aciona a função de criação de post passando oweslley e dados do input como parametros
             $inputDados.value = ''
         })
+
+        //DELETE
+        document.querySelector('.listaDePost').addEventListener('click', function(infosDoEvento) {
+            const elementoAtual = infosDoEvento.target; 
+            const isBtnDeleteClick = infosDoEvento.target.classList.contains('btn-delete')
+            if (isBtnDeleteClick) {
+                console.log('clicou no botão de apagar');
+                const id = elementoAtual.parentNode.getAttribute('data-id'); 
+                redeSocial.deletaPost(id);
+                elementoAtual.parentNode.remove();
+            }
+        })
+
+        //UPTADE
+        document.querySelector('.listaDePost').addEventListener('input', function(infosDoEvento) {
+            console.log('houve uma digitação')
+            const elementoAtual = infosDoEvento.target; 
+            const id = elementoAtual.parentNode.getAttribute('data-id')
+            redeSocial.atualizaContentDoPost(id, elementoAtual.innerText)
+        })
+
 </script>
