@@ -7,13 +7,14 @@
 <script>
 
     //código de responsabilidade backend ---------------------------------------------
+
     const redeSocial = { //criando objeto com ARRAY, substituindo um banco de dados
         usuarios: [{
             username: 'oweslley',
         }],
 
         post: [{
-            id: Date.now(),
+            id: Date.now(), //esse date now pega a data do dia junto com os milisegundos atuais, gerando um id de 13 numeros
             criador: 'oweslley',
             conteudo: 'primeiro post, testing',
         }],
@@ -26,14 +27,14 @@
         criaPost(dados, hmtlOnly = false) { //função resposável a criar os post do usuario
             const idInternoAqui = Date.now();
             if (!hmtlOnly) {
-                redeSocial.post.push({ //const PostJS, objeto POST vai receber o .push'acresimo de conteudo em ultima pocição'
-                id: dados.id || idInternoAqui, //soma +1 no id do post anterior
-                criador: dados.criador, //criador vai receber parametro dados
-                conteudo: dados.conteudo }); //conteudo vai receber parametro dados
+                redeSocial.post.push({ //redeSocial, objeto POST vai receber o .push 'acresimo de conteudo em ultima pocição'
+                id: idInternoAqui, //
+                criador: dados.criador, //por 'defalt', lá em baixo está fixado o usuario 'oweslley'
+                conteudo: dados.conteudo }); //conteudo vai receber parametro prenchidos no input 
             }
 
             //cria post html
-            const $listaDePost = document.querySelector('.listaDePost') //nossa ul
+            const $listaDePost = document.querySelector('.listaDePost') //nossa ul 'unordered list', lista não ordenada para acresimos de texto
             $listaDePost.insertAdjacentHTML('afterbegin', `
             <li data-id="${idInternoAqui}">
                 <button class="btn-delete">delete</button>
@@ -41,58 +42,57 @@
                     ${dados.conteudo}
                 </span>
             </li>
-            `); //insertAdjacentHTML, vai ser sempre adicioando logo dentro do elemento, antes de seu primeiro filho.
+            `); //insertAdjacentHTML, é uma funcionalidade que dita a poscição de adição html, nesse caso, 'afterbegin' vai ser sempre adicioando logo dentro do elemento, antes de seu primeiro filho.
         },
 
         deletaPost(id) {
-            const listaDePostsAtualizada = redeSocial.post.filter((postAtual) => {
-                return postAtual.id !== Number(id);
+            const listaDePostsAtualizada = redeSocial.post.filter((postAtual) => { //esse .filter vai fazer uma copia do array redesocial.elemento POST 
+                return postAtual.id !== Number(id); //com as particularidades ditas abaixo, onde o postAtual.id é diferente daquele dito em parametro. ou seja, copia do array sem o ele,ento com id em parametro
             })
-            console.log(listaDePostsAtualizada);
-            redeSocial.post = listaDePostsAtualizada;
+            //console.log(listaDePostsAtualizada);
+            redeSocial.post = listaDePostsAtualizada; //o array recebe sua copia
         },
 
         atualizaContentDoPost(id, novoConteudo) {
-            const postQueVaiSerAtualizado = redeSocial.post.find((postS) => {
-                return postS.id === Number(id);
+            const postQueVaiSerAtualizado = redeSocial.post.find((postS) => { //o .find vai buscar dentro do array objeto um elemento que corresponde a condição abaixo
+                return postS.id === Number(id); //
             });
-            console.log(postQueVaiSerAtualizado)
-            postQueVaiSerAtualizado.conteudo = novoConteudo
+            //console.log(postQueVaiSerAtualizado)
+            postQueVaiSerAtualizado.conteudo = novoConteudo //aqui ele altera o conteudo desse elemento que foi pescado conforme ID 
         },
     }
-        //código front end ----------------------------------------------
+        //código front end -------------------------------------------------
 
         const $meuForm = window.document.getElementById('main')
+
         //READ
         redeSocial.readPost()
 
         //CREATE
         $meuForm.addEventListener('submit', function criaPostController(infosDoEvento) { //assim que houver um submit, execute a função criaPostController
-            infosDoEvento.preventDefault();
+            infosDoEvento.preventDefault(); // o preventDefault empede uma ação padrão a determinados eventos do html, nesse caso, ao clicar, o submit iria recarregar a pagina, o preventDefault breca isso
             const $inputDados = document.querySelector('input[name="criaPost"]')
 
             redeSocial.criaPost({criador: 'oweslley', conteudo: $inputDados.value}) //aciona a função de criação de post passando oweslley e dados do input como parametros
-            $inputDados.value = ''
+            $inputDados.value = '' //limpa o campo de input
         })
 
         //DELETE
-        document.querySelector('.listaDePost').addEventListener('click', function(infosDoEvento) {
-            const elementoAtual = infosDoEvento.target; 
-            const isBtnDeleteClick = infosDoEvento.target.classList.contains('btn-delete')
-            if (isBtnDeleteClick) {
-                console.log('clicou no botão de apagar');
-                const id = elementoAtual.parentNode.getAttribute('data-id'); 
-                redeSocial.deletaPost(id);
-                elementoAtual.parentNode.remove();
+        document.querySelector('.listaDePost').addEventListener('click', function(infosDoEvento) { //ao clicar no ul, é acionado a função 
+            const elementoAtual = infosDoEvento.target; //elementoAtual vai salvar aonde o usuario clicou, nesse caso, o button
+            const isBtnDeleteClick = infosDoEvento.target.classList.contains('btn-delete') //infosDoEvento.target retorna BUTTON, o classList.contains btn-delete vai verificar se o button achado possui uma classe com nome btn-delete, caso sim, retorna TRUE
+            if (isBtnDeleteClick) { //se isBtnDeleteClick returnar true como dito acima
+                const id = elementoAtual.parentNode.getAttribute('data-id'); //o parentNode puxa o pai DOM do elementoAtual, q no caso é um botao, o getAttribute quer saber qual é o atriubuto data-id desse pai, que no caso, vai se ro id gerado na criação do post 
+                redeSocial.deletaPost(id); //vai mandar o id descober na linha acima como parametro, para ser escluido
+                elementoAtual.parentNode.remove(); // o elemento atual é um button, parentNode vai pegar o pai dele, 'li', e remover ele.
             }
         })
 
         //UPTADE
-        document.querySelector('.listaDePost').addEventListener('input', function(infosDoEvento) {
-            console.log('houve uma digitação')
-            const elementoAtual = infosDoEvento.target; 
-            const id = elementoAtual.parentNode.getAttribute('data-id')
-            redeSocial.atualizaContentDoPost(id, elementoAtual.innerText)
+        document.querySelector('.listaDePost').addEventListener('input', function(infosDoEvento) { //ao alterar o valor do input, aciona função
+            const elementoAtual = infosDoEvento.target; //elementoAtual vai salvar aonde o usuario clicou, nesse caso, o input
+            const id = elementoAtual.parentNode.getAttribute('data-id') //puxou o pai do input, li, e consultou qual o valor proposto na propriedade data-id
+            redeSocial.atualizaContentDoPost(id, elementoAtual.innerText) //chamou a função e determinou os parametros, ID descoberto acima, texto digitado no input
         })
 
 </script>
